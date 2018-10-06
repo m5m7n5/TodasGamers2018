@@ -1,43 +1,46 @@
-﻿using System;
+﻿using Assets.Scripts;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float Speed;
-    public GameObject SpriteObject;
-    public Animator SpriteAnimator;
+    public EntityController EntityController;
 
-    private float AnimationTransitionSpeed = 5;
-    private float delayedHorizontalIncrement = 1;
-    private float delayedVerticalIncrement = 1;
+    private float _hope;
+    private float _horror;
 
-    private Vector2 directionVector = new Vector2(1, -1);
+    public float Hope
+    {
+        get { return _hope; }
+        set
+        {
+            UICanvasController.Instance.Hope.value = value;
+            _hope = value;
+        }
+    }
+
+    public float Horror
+    {
+        get { return _horror; }
+        set
+        {
+            UICanvasController.Instance.Horror.value = value;
+            _horror = value;
+        }
+    }
 
     // Use this for initialization
     void Start()
     {
+        _hope = GameSettingsManager.LevelStartingHope;
+        _horror = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float horizontalAxis = Input.GetAxis("Horizontal");
-        float verticalAxis = Input.GetAxis("Vertical");
-        if (Math.Abs(horizontalAxis) > 0 || Math.Abs(verticalAxis) > 0)
-        {
-            directionVector = new Vector2(Math.Sign(horizontalAxis), Math.Sign(verticalAxis));
-        }
-
-        delayedHorizontalIncrement = directionVector.x < 0
-            ? Math.Max(delayedHorizontalIncrement + Time.deltaTime * AnimationTransitionSpeed * directionVector.x, -1)
-            : Math.Min(delayedHorizontalIncrement + Time.deltaTime * AnimationTransitionSpeed * directionVector.x, 1);
-        delayedVerticalIncrement = directionVector.y < 0
-            ? Math.Max(delayedVerticalIncrement + Time.deltaTime * AnimationTransitionSpeed * directionVector.y, -1)
-            : Math.Min(delayedVerticalIncrement + Time.deltaTime * AnimationTransitionSpeed * directionVector.y, 1);
-
-        SpriteAnimator.SetFloat("Horizontal", delayedHorizontalIncrement);
-        SpriteAnimator.SetFloat("Vertical", delayedVerticalIncrement);
-        transform.Translate(Speed * Time.deltaTime *
-                            new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")));
+        Vector2 movementVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        movementVector.Normalize();
+        EntityController.Move(movementVector.x, movementVector.y);
+        Hope = _hope - Time.deltaTime * (1f + 1.0f / GameSettingsManager.LevelMaxHorror);
     }
 }
