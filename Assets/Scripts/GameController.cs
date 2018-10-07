@@ -18,10 +18,5 @@ namespace Assets.Scripts
         {
             _instance = this;
         }
-
-        private void Update()
-        {
-            
-        }
     }
 }
