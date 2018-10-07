@@ -6,12 +6,22 @@ public class PlayerController : MonoBehaviour
     public EntityController EntityController;
     public GameObject ClosestGift;
     public GameObject ClosestHouse;
+    public float SwordDistance = 15;
+    public float AttackCooldown = 1f;
+    public float AttackDuration = 0.75f;
+
+    public GameObject Sword;
 
     private int _giftsDelivered;
     private int _currentPickedGifts;
 
     private float _hope;
     private float _horror;
+
+    private float _attackCooldownCounter;
+    private float _attackDurationCounter;
+
+    private Vector2 _movementVector;
 
     public int GiftsDelivered
     {
@@ -63,9 +73,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 movementVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        movementVector.Normalize();
-        EntityController.Move(movementVector.x, movementVector.y);
+        _movementVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        _movementVector.Normalize();
+        EntityController.Move(_movementVector.x, _movementVector.y);
         Hope = _hope - Time.deltaTime * (1f + 1.0f / GameSettingsManager.LevelMaxHorror);
         if (ClosestGift != null && Input.GetKeyDown(KeyCode.E))
         {
@@ -79,5 +89,39 @@ public class PlayerController : MonoBehaviour
             GiftsDelivered++;
             CurrentPickedGifts--;
         }
+
+        _attackCooldownCounter += Time.deltaTime;
+        _attackDurationCounter += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (_attackCooldownCounter > AttackCooldown)
+            {
+                _attackCooldownCounter = 0;
+                _attackDurationCounter = 0;
+                SpawnSword();
+            }
+        }
+
+        if (_attackDurationCounter > AttackDuration)
+        {
+            _attackDurationCounter = 0;
+            DispawnSword();
+        }
+    }
+
+    private void SpawnSword()
+    {
+        Sword.SetActive(true);
+        Sword.transform.localPosition =
+            new Vector3(_movementVector.x, 0, _movementVector.y) * SwordDistance + new Vector3(0, 2, 0);
+        Debug.Log(Vector2.Angle(new Vector2(1, 0), _movementVector));
+        Sword.transform.localRotation =
+            Quaternion.Euler(0, -Vector2.SignedAngle(new Vector2(1, 0), _movementVector), 0);
+    }
+
+    private void DispawnSword()
+    {
+        Sword.SetActive(false);
     }
 }

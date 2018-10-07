@@ -10,9 +10,9 @@ public class DamageRecivedDetected : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            Debug.Log("Hitted");
             PlayerController.Hope -= 2;
             PlayerController.Horror += 0.5f;
+            Destroy(other.gameObject);
         }
         else if (other.CompareTag("House"))
         {

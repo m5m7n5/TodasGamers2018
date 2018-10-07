@@ -36,7 +36,6 @@ namespace Assets.Scripts
                 {
                     v = Random.insideUnitCircle * SpawnRadius;
                     positions.Add(PlayerController.transform.position + new Vector3(v.x, 1.5f, v.y));
-                    Debug.Log(positions[positions.Count - 1]);
                 }
 
                 Spawner.Spawn(2, 3, 2, positions);

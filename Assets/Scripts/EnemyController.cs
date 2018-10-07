@@ -26,11 +26,13 @@ public class EnemyController : MonoBehaviour
             Brain.ThinkOnCastAbility();
         }
 
+/*
         if (Input.GetKeyDown(KeyCode.E))
         {
             EntityController.SetPhysics(false);
             ParticleSystem.SetActive(true);
             Status = AnimationStatus.Dying;
         }
+*/
     }
 }
