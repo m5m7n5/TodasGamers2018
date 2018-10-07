@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
 
     public GameObject Sword;
 
+    public AudioClip TerrorClip;
+    public AudioSource AudioSource;
+
     private int _giftsDelivered;
     private int _currentPickedGifts;
 
@@ -30,6 +33,10 @@ public class PlayerController : MonoBehaviour
         {
             UICanvasController.Instance.GiftsDelivered(value);
             _giftsDelivered = value;
+            if (_giftsDelivered >= 15)
+            {
+                GameController.Instance.Win();
+            }
         }
     }
 
@@ -50,6 +57,10 @@ public class PlayerController : MonoBehaviour
         {
             UICanvasController.Instance.Hope.value = value;
             _hope = value;
+            if (_hope <= 0)
+            {
+                GameController.Instance.Lost();
+            }
         }
     }
 
@@ -59,7 +70,17 @@ public class PlayerController : MonoBehaviour
         set
         {
             UICanvasController.Instance.Horror.value = value;
+            if (_horror < 25 && _horror + value > 25)
+            {
+                AudioSource.clip = TerrorClip;
+                AudioSource.Play();
+            }
+
             _horror = value;
+            if (_horror >= 50)
+            {
+                GameController.Instance.Lost();
+            }
         }
     }
 

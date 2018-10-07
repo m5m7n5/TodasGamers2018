@@ -27,20 +27,22 @@ public class UICanvasController : MonoBehaviour
         Hope.value = GameSettingsManager.LevelStartingHope;
         Horror.maxValue = GameSettingsManager.LevelMaxHorror;
         Horror.value = 0;
-        GiftsDeliveredTextObject.text = "0";
+        GiftsDeliveredTextObject.text = "0/15";
         CurrentGiftsTextObject.text = "0";
     }
 
     public void ShowPickGiftMessage(Vector3 position)
     {
         PickGiftGameObject.SetActive(true);
-        PickGiftGameObject.transform.position = position;
+        PickGiftGameObject.transform.position =
+            new Vector3(position.x, PickGiftGameObject.transform.position.y, position.z);
     }
 
     public void ShowGiveGiftMessage(Vector3 position)
     {
         GiveGiftGameObject.SetActive(true);
-        GiveGiftGameObject.transform.position = position;
+        GiveGiftGameObject.transform.position =
+            new Vector3(position.x, GiveGiftGameObject.transform.position.y, position.z);
     }
 
     public void DeactivatePickGiftMessage()
@@ -55,7 +57,7 @@ public class UICanvasController : MonoBehaviour
 
     public void GiftsDelivered(int value)
     {
-        GiftsDeliveredTextObject.text = "" + value;
+        GiftsDeliveredTextObject.text = "" + value + "/15";
     }
 
     public void CurrentGifts(int value)

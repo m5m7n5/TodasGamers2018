@@ -11,7 +11,7 @@ public class DamageRecivedDetected : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             PlayerController.Hope -= 2;
-            PlayerController.Horror += 0.5f;
+            PlayerController.Horror += 1f;
             Destroy(other.gameObject);
         }
         else if (other.CompareTag("House"))

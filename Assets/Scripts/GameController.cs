@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts
 {
@@ -10,6 +11,9 @@ namespace Assets.Scripts
         public SpawnController Spawner;
         public float SpawnRatio;
         public float SpawnRadius = 7;
+
+        public GameObject WinPanel;
+        public GameObject LosePanel;
 
         private static GameController _instance;
         private float _timeCounter;
@@ -41,6 +45,23 @@ namespace Assets.Scripts
                 Spawner.Spawn(2, 3, 2, positions);
                 _timeCounter = 0;
             }
+        }
+
+        public void Win()
+        {
+            Time.timeScale = 0;
+            WinPanel.SetActive(true);
+        }
+
+        public void Lost()
+        {
+            Time.timeScale = 0;
+            LosePanel.SetActive(true);
+        }
+
+        public void Quit()
+        {
+            Application.Quit();
         }
     }
 }
